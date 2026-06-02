@@ -8,10 +8,8 @@ class EMuseuPage extends StatefulWidget {
 }
 
 class _EMuseuPageState extends State<EMuseuPage> {
-  // Estado para guardar a categoria escolhida no Menu suspenso
   String _categoriaSelecionada = 'Todos';
 
-  // As categorias disponíveis para o filtro
   final List<String> _categorias = [
     'Todos',
     'Componentes',
@@ -20,50 +18,133 @@ class _EMuseuPageState extends State<EMuseuPage> {
     'Periféricos',
   ];
 
+  // Lista atualizada com as imagens da pasta
   static const List<_MuseuItem> _items = [
+    // --- PERIFÉRICOS (Mapeados do Print) ---
+    _MuseuItem(
+      name: 'Impressora Epson',
+      category: 'Periféricos',
+      description: 'Descrição a ser adicionada pelo site.',
+      history: 'História a ser adicionada pelo site.',
+      imagePath: 'assets/images/museu/epson-526x526.jpg',
+      color: Color(0xFF6A1B9A),
+    ),
+    _MuseuItem(
+      name: 'Scanner Genius ColorPage HR7X',
+      category: 'Periféricos',
+      description: 'Descrição a ser adicionada pelo site.',
+      history: 'História a ser adicionada pelo site.',
+      imagePath: 'assets/images/museu/Genius-ColorPage-HR7X-Slim-526x526.jpg',
+      color: Color(0xFF8E24AA),
+    ),
+    _MuseuItem(
+      name: 'Impressora HP Officejet J3680',
+      category: 'Periféricos',
+      description: 'Descrição a ser adicionada pelo site.',
+      history: 'História a ser adicionada pelo site.',
+      imagePath: 'assets/images/museu/HP-Officejet-J3680-All-in-One-526x526.jpg',
+      color: Color(0xFF4A148C),
+    ),
+    _MuseuItem(
+      name: 'Impressora HP Photosmart C5580',
+      category: 'Periféricos',
+      description: 'Descrição a ser adicionada pelo site.',
+      history: 'História a ser adicionada pelo site.',
+      imagePath: 'assets/images/museu/HP-Photosmart-C5580-All-in-One-526x526.jpg',
+      color: Color(0xFF7B1FA2),
+    ),
+    _MuseuItem(
+      name: 'Impressora Matricial RIMA XT-250',
+      category: 'Periféricos',
+      description: 'Descrição a ser adicionada pelo site.',
+      history: 'História a ser adicionada pelo site.',
+      imagePath: 'assets/images/museu/Impressora-matricial-RIMA-XT-250.jpg',
+      color: Color(0xFF9C27B0),
+    ),
+    _MuseuItem(
+      name: 'Monitor Apple',
+      category: 'Periféricos',
+      description: 'Descrição a ser adicionada pelo site.',
+      history: 'História a ser adicionada pelo site.',
+      imagePath: 'assets/images/museu/monitor-appple-526x526.jpg', 
+      color: Color(0xFF6A1B9A),
+    ),
+    _MuseuItem(
+      name: 'Monitor BAK BK-TFT TV7150',
+      category: 'Periféricos',
+      description: 'Descrição a ser adicionada pelo site.',
+      history: 'História a ser adicionada pelo site.',
+      imagePath: 'assets/images/museu/monitorbak.jpg',
+      color: Color(0xFF8E24AA),
+    ),
+    _MuseuItem(
+      name: 'Monitor Philips 105S',
+      category: 'Periféricos',
+      description: 'Descrição a ser adicionada pelo site.',
+      history: 'História a ser adicionada pelo site.',
+      imagePath: 'assets/images/museu/Monitor-Philips-105S-526x526.jpg',
+      color: Color(0xFF4A148C),
+    ),
+    _MuseuItem(
+      name: 'Monitor CRT Positivo',
+      category: 'Periféricos',
+      description: 'Descrição a ser adicionada pelo site.',
+      history: 'História a ser adicionada pelo site.',
+      imagePath: 'assets/images/museu/monitor-positivo.jpg',
+      color: Color(0xFF7B1FA2),
+    ),
+    _MuseuItem(
+      name: 'Mouse Logitech sem fio',
+      category: 'Periféricos',
+      description: 'Modelo: Logitech M280\nSensor: Logitech Advanced Optical Tracking\nDPI: 1000\nBateria: 1 pilha AA\nQuantidade de botões: 3\nConexão: conexão sem fio de 2,4 GHz\nAlcance: 10 m\nDesign para destros.',
+      history: 'Informação histórica não cadastrada para este item.', 
+      imagePath: 'assets/images/museu/mouselogitech.png', 
+      color: Color(0xFF9C27B0),
+    ),
+    _MuseuItem(
+      name: 'Scanner Genius EasyScan Deluxe',
+      category: 'Periféricos',
+      description: 'Descrição a ser adicionada pelo site.',
+      history: 'História a ser adicionada pelo site.',
+      imagePath: 'assets/images/museu/Scanner-Genius-EasyScan-Color-Deluxe-526x526.jpg',
+      color: Color(0xFF6A1B9A),
+    ),
+    _MuseuItem(
+      name: 'Scanner HP Scanjet Enterprise',
+      category: 'Periféricos',
+      description: 'Descrição a ser adicionada pelo site.',
+      history: 'História a ser adicionada pelo site.',
+      imagePath: 'assets/images/museu/Scanner-HP-Scanjet-Enterprise-7000-s2-526x526.jpg',
+      color: Color(0xFF8E24AA),
+    ),
+    _MuseuItem(
+      name: 'Teclado Positivo AT-486',
+      category: 'Periféricos',
+      description: 'Descrição a ser adicionada pelo site.',
+      history: 'História a ser adicionada pelo site.',
+      imagePath: 'assets/images/museu/Teclado-Positivo-AT-486-526x526.jpg',
+      color: Color(0xFF4A148C),
+    ),
+
+    // --- OUTROS E COMPONENTES (Para o filtro não ficar vazio) ---
     _MuseuItem(
       name: 'Olivetti Linea 98',
       category: 'Outros',
-      description:
-          'Máquina de escrever manual (1971). Fabricada na Itália, foi muito utilizada em escritórios.',
-      history:
-          'A Olivetti Linea 98 foi um marco na datilografia mundial. Lançada na década de 70, tornou-se o padrão em escritórios e instituições educacionais antes da popularização dos computadores pessoais. É um símbolo da transição tecnológica do século XX.',
+      description: 'Máquina de escrever manual (1971).',
+      history: 'A Olivetti Linea 98 foi um marco na datilografia mundial...',
       imagePath: 'assets/images/museu/olivetti.jpg',
       color: Color(0xFFC2185B),
     ),
     _MuseuItem(
-      name: 'IBM 6746',
-      category: 'Outros',
-      description:
-          'Máquina de escrever elétrica (1984). Usa um microprocessador para automatizar funções.',
-      history:
-          'Este modelo revolucionou a digitação ao introduzir componentes eletrônicos que permitiam correções rápidas e formatação automática. A impressão do tipo "daisy wheel" garantia uma qualidade de texto impecável para a época.',
-      imagePath: 'assets/images/museu/ibm.jpg',
-      color: Color(0xFF0288D1),
-    ),
-    _MuseuItem(
-      name: 'Teclado',
-      category: 'Periféricos',
-      description:
-          'Periférico de entrada composto por teclas e circuitos. Seu descarte inadequado pode liberar substâncias tóxicas.',
-      history:
-          'Os teclados evoluíram dos modelos mecânicos barulhentos para as membranas silenciosas. Por conterem trilhas de prata e plásticos de diferentes densidades, sua reciclagem exige a separação minuciosa de cada camada.',
-      imagePath: 'assets/images/museu/teclado.jpg',
-      color: Color(0xFF7B1FA2),
-    ),
-    _MuseuItem(
-      name: 'Processador',
+      name: 'Processador Intel 486',
       category: 'Componentes',
-      description:
-          'Cérebro do computador. Contém ouro, cobre e silício. Um dos componentes com maior valor na cadeia de reciclagem.',
-      history:
-          'A evolução dos processadores dita o ritmo da Lei de Moore. As versões mais antigas (como os 386 e 486) possuíam uma concentração de ouro muito maior em seus pinos do que os modelos atuais, o que os torna peças cobiçadas na mineração urbana.',
+      description: 'Cérebro do computador antigo.',
+      history: 'Rico em ouro nos pinos de conexão.',
       imagePath: 'assets/images/museu/processador.jpg',
-      color: Color(0xFF7B1FA2),
+      color: Color(0xFF0288D1),
     ),
   ];
 
-  // Função que retorna apenas os itens da categoria escolhida
   List<_MuseuItem> get _itensFiltrados {
     if (_categoriaSelecionada == 'Todos') {
       return _items;
@@ -94,7 +175,7 @@ class _EMuseuPageState extends State<EMuseuPage> {
                   style: TextStyle(fontSize: 16)),
               const SizedBox(height: 12),
               const Text(
-                  '♻️ Doações:\nAceitamos tecnologias antiquadas (não precisam estar funcionando). Agende através do telefone (42) 3629-8144.',
+                  '♻️ Doações:\nAceitamos tecnologias antiquadas. Agende através do telefone (42) 3629-8144.',
                   style: TextStyle(fontSize: 16)),
               const SizedBox(height: 24),
               SizedBox(
@@ -133,7 +214,6 @@ class _EMuseuPageState extends State<EMuseuPage> {
       backgroundColor: const Color(0xFFF3E5F5),
       body: Column(
         children: [
-          // Bloco do Menu suspenso de filtro
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -161,7 +241,6 @@ class _EMuseuPageState extends State<EMuseuPage> {
                       }).toList(),
                       onChanged: (String? novaCategoria) {
                         if (novaCategoria != null) {
-                          // O setState avisa o Flutter para desenhar a tela de novo com o novo filtro
                           setState(() {
                             _categoriaSelecionada = novaCategoria;
                           });
@@ -173,8 +252,6 @@ class _EMuseuPageState extends State<EMuseuPage> {
               ],
             ),
           ),
-          
-          // Grade de Imagens (Agora usando a lista _itensFiltrados)
           Expanded(
             child: GridView.builder(
               padding: const EdgeInsets.all(16),
@@ -224,10 +301,17 @@ class _MuseuCard extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 color: item.color.withOpacity(0.1),
-                child: Icon(
-                  Icons.image_outlined,
-                  size: 52,
-                  color: item.color.withOpacity(0.4),
+                child: Image.asset(
+                  item.imagePath,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    // Ícone reserva caso o nome ou formato da imagem esteja errado
+                    return Icon(
+                      Icons.image_not_supported_outlined,
+                      size: 52,
+                      color: item.color.withOpacity(0.4),
+                    );
+                  },
                 ),
               ),
             ),
@@ -320,11 +404,18 @@ class _MuseuDetailPage extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Center(
-                child: Icon(
-                  Icons.image_outlined,
-                  size: 80,
-                  color: item.color.withOpacity(0.3),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  item.imagePath,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Icon(
+                      Icons.image_not_supported_outlined,
+                      size: 80,
+                      color: item.color.withOpacity(0.3),
+                    );
+                  },
                 ),
               ),
             ),
