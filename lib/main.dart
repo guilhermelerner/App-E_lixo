@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'modules/e_lixo/e_lixo_page.dart';
 import 'modules/educa/educa_page.dart';
-import 'modules/e_museu/e_museu_page.dart';
+import 'modules/e_museu/e_museu_home_page.dart';
 
 void main() {
   runApp(const ELixoApp());
@@ -55,7 +55,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
   final List<Widget> _pages = const [
     ELixoPage(),
     EducaPage(),
-    EMuseuPage(),
+    EMuseuHomePage(),
   ];
 
   final List<_NavItem> _navItems = const [
