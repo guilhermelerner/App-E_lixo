@@ -110,8 +110,53 @@ class _EMuseuHomePageState extends State<EMuseuHomePage> {
         },
         itemBuilder: (context, index) {
           double pageOffset = index - _scrollOffset;
-
           double textTranslation = pageOffset * 180;
+
+          Widget cardContent = Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                _panels[index]['title']!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                _panels[index]['desc']!,
+                textAlign: TextAlign.justify,
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 16,
+                ),
+              ),
+              if (index == 1) ...[
+                const SizedBox(height: 12),
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Toque para conhecer',
+                      style: TextStyle(
+                        color: Color(0xFFF5F5DC),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(width: 4),
+                    Icon(
+                      Icons.arrow_forward,
+                      color: Color(0xFFF5F5DC),
+                      size: 16,
+                    ),
+                  ],
+                ),
+              ],
+            ],
+          );
 
           return Stack(
             children: [
@@ -121,7 +166,6 @@ class _EMuseuHomePageState extends State<EMuseuHomePage> {
                 height: double.infinity,
                 fit: BoxFit.cover,
               ),
-
               SafeArea(
                 child: Padding(
                   padding: const EdgeInsets.all(24.0),
@@ -134,22 +178,20 @@ class _EMuseuHomePageState extends State<EMuseuHomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            GestureDetector(
-                              onTap: () async {
-                                if (index == 1) {
-                                  _timer?.cancel();
+                            index == 1
+                                ? ElevatedButton(
+                                    onPressed: () async {
+                                      _timer?.cancel();
 
-                                  await Navigator.push(
-                                    context,
-                                    PageRouteBuilder(
-                                      pageBuilder:
-                                          (
+                                      await Navigator.push(
+                                        context,
+                                        PageRouteBuilder(
+                                          pageBuilder: (
                                             context,
                                             animation,
                                             secondaryAnimation,
                                           ) => const EMuseuAcervoPage(),
-                                      transitionsBuilder:
-                                          (
+                                          transitionsBuilder: (
                                             context,
                                             animation,
                                             secondaryAnimation,
@@ -167,71 +209,37 @@ class _EMuseuHomePageState extends State<EMuseuHomePage> {
                                               child: child,
                                             );
                                           },
-                                      transitionDuration: const Duration(
-                                        milliseconds: 550,
-                                      ),
-                                      reverseTransitionDuration: const Duration(
-                                        milliseconds: 500,
-                                      ),
-                                    ),
-                                  );
-                                  _startAutoPlay();
-                                }
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  color: Colors.brown.withValues(alpha: 0.7),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      _panels[index]['title']!,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Text(
-                                      _panels[index]['desc']!,
-                                      textAlign: TextAlign.justify,
-                                      style: const TextStyle(
-                                        color: Colors.white70,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                    if (index == 1) ...[
-                                      const SizedBox(height: 12),
-                                      const Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            'Toque para conhecer',
-                                            style: TextStyle(
-                                              color: Color(0xFFF5F5DC),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16,
-                                            ),
+                                          transitionDuration: const Duration(
+                                            milliseconds: 550,
                                           ),
-                                          SizedBox(width: 4),
-                                          Icon(
-                                            Icons.arrow_forward,
-                                            color: Color(0xFFF5F5DC),
-                                            size: 16,
+                                          reverseTransitionDuration: const Duration(
+                                            milliseconds: 500,
                                           ),
-                                        ],
+                                        ),
+                                      );
+                                      _startAutoPlay();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          Colors.brown.withValues(alpha: 0.7),
+                                      padding: const EdgeInsets.all(16),
+                                      elevation: 4,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
                                       ),
-                                    ],
-                                  ],
-                                ),
-                              ),
-                            ),
+                                      // Altera o efeito ripple para branco sutil, removendo o tom verde
+                                      overlayColor: Colors.white.withValues(alpha: 0.15),
+                                    ),
+                                    child: cardContent,
+                                  )
+                                : Container(
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      color: Colors.brown.withValues(alpha: 0.7),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: cardContent,
+                                  ),
                           ],
                         ),
                       ),
