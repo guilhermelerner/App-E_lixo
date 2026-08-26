@@ -1,14 +1,14 @@
 # E-Lixo
 
 Aplicativo educativo em Flutter sobre resíduos eletrônicos. A experiência reúne
-orientações de descarte, conteúdos de conscientização e um museu virtual para
+orientações de descarte, protocolos básicos de conserto e um museu virtual para
 explicar a evolução e o impacto de diferentes equipamentos.
 
 ## Destaques
 
-- Navegação principal por módulos
+- Navegação principal entre E-Lixo e E-Museu
 - Categorias de resíduos eletrônicos
-- Conteúdo educativo sobre segurança, coleta e impacto ambiental
+- Protocolos de conserto organizados por componente
 - Museu virtual com cards, detalhes e seções expansíveis
 - Interface responsiva baseada em Material Design
 - Suporte às plataformas mantidas pelo Flutter
@@ -25,7 +25,6 @@ explicar a evolução e o impacto de diferentes equipamentos.
 lib/
 ├── main.dart
 └── modules/
-    ├── educa/       # Conteúdos educativos
     ├── e_lixo/      # Categorias e informações sobre resíduos
     └── e_museu/     # Museu virtual e detalhes dos itens
 assets/images/       # Imagens utilizadas pela aplicação
@@ -60,6 +59,6 @@ desses materiais mais acessíveis.
 
 ## Status
 
-Projeto educacional em desenvolvimento. Os módulos principais já estão
-estruturados e podem ser ampliados com mapas de pontos de coleta e fontes de
-dados externas.
+Projeto educacional em desenvolvimento, preparado para execução local em um
+totem interativo de alta resolução. O conteúdo é mantido localmente para que a
+experiência continue funcionando mesmo sem conexão com a internet.
