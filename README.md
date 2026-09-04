@@ -7,10 +7,11 @@ explicar a evolução e o impacto de diferentes equipamentos.
 ## Destaques
 
 - Navegação principal entre E-Lixo e E-Museu
-- Categorias de resíduos eletrônicos
-- Protocolos de conserto organizados por componente
-- Museu virtual com cards, detalhes e seções expansíveis
-- Interface responsiva baseada em Material Design
+- Vídeo educativo incorporado na página do E-Lixo
+- Protocolos de conserto com retorno direto ao vídeo
+- Museu virtual com carrossel de peças e ficha técnica
+- Interface responsiva para totem vertical 2160 × 3840
+- Solicitação de tela cheia ao entrar em um módulo
 - Suporte às plataformas mantidas pelo Flutter
 
 ## Tecnologias
@@ -51,6 +52,20 @@ flutter analyze
 flutter test
 ```
 
+### Executar no totem em modo quiosque
+
+Em um PowerShell, inicie o servidor local:
+
+```powershell
+flutter run -d web-server --web-port 8080
+```
+
+Em outro PowerShell, abra o Edge em modo imersivo:
+
+```powershell
+Start-Process msedge.exe -ArgumentList "--kiosk http://localhost:8080 --edge-kiosk-type=fullscreen"
+```
+
 ## Motivação
 
 O descarte incorreto de eletrônicos traz riscos ambientais e à saúde. O E-Lixo
@@ -59,6 +74,6 @@ desses materiais mais acessíveis.
 
 ## Status
 
-Projeto educacional em desenvolvimento, preparado para execução local em um
-totem interativo de alta resolução. O conteúdo é mantido localmente para que a
-experiência continue funcionando mesmo sem conexão com a internet.
+Projeto educacional em desenvolvimento, preparado para execução em um totem
+interativo de alta resolução. As imagens e fichas do acervo ficam no projeto;
+o vídeo incorporado ainda depende de conexão com a internet.
