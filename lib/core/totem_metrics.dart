@@ -6,23 +6,28 @@ class TotemMetrics {
 
   static double scale(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    return (width / 1080).clamp(.78, 1.35).toDouble();
+    return (width / 1080).clamp(.40, 2.0).toDouble();
   }
 
-  static double size(BuildContext context, double value) => value * scale(context);
+  static bool isPortrait(BuildContext context) {
+    final viewport = MediaQuery.sizeOf(context);
+    return viewport.height > viewport.width * 1.20;
+  }
+
+  static double size(BuildContext context, double value) =>
+      value * scale(context);
 
   static EdgeInsets pagePadding(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
     final s = scale(context);
-    if (width < 1000) {
-      return EdgeInsets.fromLTRB(20 * s, 24 * s, 20 * s, 34 * s);
+    if (isPortrait(context)) {
+      return EdgeInsets.fromLTRB(24 * s, 30 * s, 24 * s, 42 * s);
     }
     return EdgeInsets.fromLTRB(64 * s, 54 * s, 64 * s, 72 * s);
   }
 
   static double sidebarWidth(BuildContext context) {
     final viewport = MediaQuery.sizeOf(context);
-    final percentage = viewport.height > viewport.width * 1.25 ? .24 : .20;
-    return viewport.width * percentage;
+    final percentage = isPortrait(context) ? .31 : .22;
+    return (viewport.width * percentage).clamp(132.0, 680.0).toDouble();
   }
 }
