@@ -1,0 +1,8 @@
+Para o vídeo rodar SEM internet no totem (exigência da professora):
+
+1. Exporte o vídeo em MP4 (H.264 + AAC, 1920x1080 ou 2160x3840).
+2. Salve como: assets/videos/e-lixo.mp4
+3. Rode: flutter pub get
+4. Teste offline: flutter run -d windows (ou web-server) com a internet desligada.
+
+Enquanto o arquivo não existir, o app mostra o YouTube (web) ou um aviso (Windows/teste).
