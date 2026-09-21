@@ -436,6 +436,48 @@ class _EMuseuPageState extends State<EMuseuPage> {
       manufacturer: 'IEC',
       origin: 'Brasil',
     ),
+    _MuseuItem(
+      name: 'Fax Panasonic KX-FT987',
+      category: 'Outros',
+      description:
+          'Aparelho de fax com identificador de chamadas e secretária eletrônica integrada.',
+      history:
+          'O fax foi essencial em escritórios antes da popularização do e-mail.',
+      imagePath:
+          'assets/images/museu/acervo_site/full/Fax-com-identificador-de-chamadas-Panasonic-KX-FT987.jpg',
+      color: Color(0xFF964B00),
+      year: 'Década de 2000',
+      manufacturer: 'Panasonic',
+      origin: 'Japão',
+    ),
+    _MuseuItem(
+      name: 'Notebook CCE NCV-D5H8F',
+      category: 'Outros',
+      description:
+          'Notebook nacional com tela ampla, DVD, Wi-Fi e teclado estendido.',
+      history:
+          'Notebooks nacionais popularizaram a informática móvel no Brasil nos anos 2000.',
+      imagePath:
+          'assets/images/museu/acervo_site/full/Notebook-CCE-NCV-D5H8F.jpg',
+      color: Color(0xFFB25900),
+      year: 'Década de 2000',
+      manufacturer: 'CCE',
+      origin: 'Brasil',
+    ),
+    _MuseuItem(
+      name: 'Receptor de Satélite Jossil 6000-ST',
+      category: 'Outros',
+      description:
+          'Receptor de TV via satélite com sintonia analógica e saída de áudio e vídeo.',
+      history:
+          'Receptores de satélite levaram a TV a regiões sem cobertura de antenas convencionais.',
+      imagePath:
+          'assets/images/museu/acervo_site/full/Receptor-de-Satelite-Jossil-6000-ST.jpg',
+      color: Color(0xFFC7762C),
+      year: 'Década de 1990',
+      manufacturer: 'Jossil',
+      origin: 'Brasil',
+    ),
   ];
 
   List<_MuseuItem> get _itensFiltrados {
