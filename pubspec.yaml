@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   video_player: ^2.9.5
   web: ^1.1.1
+  window_manager: ^0.4.2
 
 dev_dependencies:
   flutter_test:
