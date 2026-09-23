@@ -36,8 +36,6 @@ class ELixoPage extends StatefulWidget {
     ),
   ];
 
-  static const String collectionAnchor = 'Pontos de coleta';
-
   @override
   State<ELixoPage> createState() => _ELixoPageState();
 }
@@ -46,7 +44,6 @@ class _ELixoPageState extends State<ELixoPage> {
   final ScrollController _scrollController = ScrollController();
   late final Map<String, GlobalKey> _anchors = {
     for (final p in ELixoPage._protocols) p.name: GlobalKey(),
-    ELixoPage.collectionAnchor: GlobalKey(),
   };
   String _lastScrolledTo = '';
   final Set<String> _completed = {};
@@ -101,6 +98,10 @@ class _ELixoPageState extends State<ELixoPage> {
       _lastScrolledTo = target;
       return;
     }
+    if (target == 'Localização de descarte' || target == 'Quiz') {
+      _lastScrolledTo = target;
+      return;
+    }
     if (target == _lastScrolledTo) return;
     _lastScrolledTo = target;
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -124,6 +125,7 @@ class _ELixoPageState extends State<ELixoPage> {
     final s = TotemMetrics.scale(context);
     final showVideo = widget.selectedCategory == 'Vídeo';
     final showQuiz = widget.selectedCategory == 'Quiz';
+    final showCollectionPoints = widget.selectedCategory == 'Localização de descarte';
     return Scaffold(
       backgroundColor: const Color(0xFF101820),
       body: LayoutBuilder(
@@ -144,13 +146,17 @@ class _ELixoPageState extends State<ELixoPage> {
                         ? _QuizPage(
                             onBackToVideo: widget.onBackToVideo,
                           )
-                        : _ProtocolsCard(
-                            protocols: ELixoPage._protocols,
-                            onBackToVideo: widget.onBackToVideo,
-                            anchors: _anchors,
-                            completed: _completed,
-                            onToggleProtocol: _toggleProtocol,
-                          ),
+                        : showCollectionPoints
+                            ? _CollectionPointsPage(
+                                onBackToVideo: widget.onBackToVideo,
+                              )
+                            : _ProtocolsCard(
+                                protocols: ELixoPage._protocols,
+                                onBackToVideo: widget.onBackToVideo,
+                                anchors: _anchors,
+                                completed: _completed,
+                                onToggleProtocol: _toggleProtocol,
+                              ),
               ),
             ),
           ),
@@ -428,114 +434,20 @@ class _ProtocolsCard extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(height: 30 * s),
-        Container(
-          key: anchors[ELixoPage.collectionAnchor],
-          child: const _CollectionPointsCard(),
-        ),
       ],
     );
   }
 }
 
-class _CollectionPointsCard extends StatelessWidget {
-  const _CollectionPointsCard();
-
-  static const _points = [
-    _CollectionPoint(
-      Icons.recycling,
-      'Ainda funciona?',
-      'Doe ou venda para reuso — o melhor descarte é o que não precisa acontecer.',
-    ),
-    _CollectionPoint(
-      Icons.storefront_outlined,
-      'Assistência técnica',
-      'Peças com defeito específico podem ser reparadas em vez de descartadas.',
-    ),
-    _CollectionPoint(
-      Icons.location_on_outlined,
-      'Ponto de coleta',
-      'Procure ecopontos ou logística reversa do fabricante mais próximos.',
-    ),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    final s = TotemMetrics.scale(context);
-    return Card(
-      margin: EdgeInsets.zero,
-      color: const Color(0xFF182A32),
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(22),
-        side: const BorderSide(color: Color(0xFF35515A)),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Padding(
-        padding: EdgeInsets.all(30 * s),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.map_outlined,
-                  color: const Color(0xFFA8D94A),
-                  size: 30 * s,
-                ),
-                SizedBox(width: 14 * s),
-                Text(
-                  'PARA ONDE LEVAR DEPOIS',
-                  style: TextStyle(
-                    color: const Color(0xFFA8D94A),
-                    fontSize: 22 * s,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: .8,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 24 * s),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final stacked = constraints.maxWidth < 780 * s;
-                if (stacked) {
-                  return Column(
-                    children: [
-                      for (final p in _points) ...[
-                        _CollectionPointTile(point: p, scale: s),
-                        if (p != _points.last) SizedBox(height: 14 * s),
-                      ],
-                    ],
-                  );
-                }
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (final p in _points) ...[
-                      Expanded(child: _CollectionPointTile(point: p, scale: s)),
-                      if (p != _points.last) SizedBox(width: 18 * s),
-                    ],
-                  ],
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _CollectionPoint {
+class _CollectionPointData {
   final IconData icon;
   final String title;
   final String description;
-  const _CollectionPoint(this.icon, this.title, this.description);
+  const _CollectionPointData(this.icon, this.title, this.description);
 }
 
 class _CollectionPointTile extends StatelessWidget {
-  final _CollectionPoint point;
+  final _CollectionPointData point;
   final double scale;
   const _CollectionPointTile({required this.point, required this.scale});
 
@@ -1145,6 +1057,137 @@ class _QuizPageState extends State<_QuizPage> {
                       ),
                     ),
                   ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CollectionPointsPage extends StatelessWidget {
+  final VoidCallback onBackToVideo;
+
+  const _CollectionPointsPage({required this.onBackToVideo});
+
+  static const _points = [
+    _CollectionPointData(
+      Icons.recycling,
+      'Ainda funciona?',
+      'Doe ou venda para reuso — o melhor descarte é o que não precisa acontecer.',
+    ),
+    _CollectionPointData(
+      Icons.storefront_outlined,
+      'Assistência técnica',
+      'Peças com defeito específico podem ser reparadas em vez de descartadas.',
+    ),
+    _CollectionPointData(
+      Icons.location_on_outlined,
+      'Ponto de coleta',
+      'Procure ecopontos ou logística reversa do fabricante mais próximos.',
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final s = TotemMetrics.scale(context);
+    return Column(
+      key: const Key('collection-points-page'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        OutlinedButton.icon(
+          onPressed: onBackToVideo,
+          icon: Icon(Icons.play_circle_outline, size: 30 * s),
+          label: Text(
+            'Voltar ao vídeo',
+            style: TextStyle(fontSize: 22 * s, fontWeight: FontWeight.w700),
+          ),
+          style: OutlinedButton.styleFrom(
+            foregroundColor: const Color(0xFFA8D94A),
+            side: const BorderSide(color: Color(0xFF5E7A43), width: 1.5),
+            padding: EdgeInsets.symmetric(horizontal: 26 * s, vertical: 20 * s),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+          ),
+        ),
+        SizedBox(height: 24 * s),
+        Card(
+          margin: EdgeInsets.zero,
+          color: const Color(0xFF182A32),
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(22),
+            side: BorderSide(
+              color: const Color(0xFFA8D94A),
+              width: 2,
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(36 * s),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.map_outlined,
+                      color: const Color(0xFFA8D94A),
+                      size: 34 * s,
+                    ),
+                    SizedBox(width: 16 * s),
+                    Expanded(
+                      child: Text(
+                        'LOCALIZAÇÃO DE DESCARTE',
+                        style: TextStyle(
+                          color: const Color(0xFFA8D94A),
+                          fontSize: 24 * s,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.2,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 28 * s),
+                Text(
+                  'Separe o equipamento, acessórios, pilhas e cabos; procure o destino adequado:',
+                  style: TextStyle(
+                    color: const Color(0xFFF5F1E8),
+                    fontSize: 22 * s,
+                    height: 1.45,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
+                ),
+                SizedBox(height: 28 * s),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final stacked = constraints.maxWidth < 780 * s;
+                    if (stacked) {
+                      return Column(
+                        children: [
+                          for (final p in _points) ...[
+                            _CollectionPointTile(point: p, scale: s),
+                            if (p != _points.last) SizedBox(height: 16 * s),
+                          ],
+                        ],
+                      );
+                    }
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (final p in _points) ...[
+                          Expanded(child: _CollectionPointTile(point: p, scale: s)),
+                          if (p != _points.last) SizedBox(width: 20 * s),
+                        ],
+                      ],
+                    );
+                  },
                 ),
               ],
             ),

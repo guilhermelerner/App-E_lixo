@@ -89,9 +89,9 @@ void main() {
     expect(find.text('Computadores'), findsWidgets);
     expect(tester.takeException(), isNull);
 
-    await tester.tap(find.text('Pontos de coleta'));
+    await tester.tap(find.text('Localização de descarte'));
     await tester.pumpAndSettle();
-    expect(find.text('PARA ONDE LEVAR DEPOIS'), findsOneWidget);
+    expect(find.text('LOCALIZAÇÃO DE DESCARTE'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

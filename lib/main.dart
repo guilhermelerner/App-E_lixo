@@ -154,7 +154,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
             Icons.keyboard_outlined,
           ),
           _SidebarCategory('Segurança e descarte', Icons.shield_outlined),
-          _SidebarCategory('Pontos de coleta', Icons.location_on_outlined),
+          _SidebarCategory('Localização de descarte', Icons.location_on_outlined),
           _SidebarCategory('Quiz', Icons.quiz_outlined),
         ]
       : const [
@@ -875,39 +875,19 @@ class _HomePageState extends State<_HomePage>
 class _AttractOverlay extends StatefulWidget {
   const _AttractOverlay();
 
-  static const images = [
-    'assets/images/home/home-background.png',
-    'assets/images/museu/acervo_site/full/prologica-cp500.jpg',
-    'assets/images/museu/acervo_site/full/Macintosh-Classic.jpg',
-    'assets/images/museu/acervo_site/full/acer-3690.jpeg',
-    'assets/images/museu/monitor-positivo.jpg',
-    'assets/images/museu/epson-526x526.jpg',
-  ];
-
   @override
   State<_AttractOverlay> createState() => _AttractOverlayState();
 }
 
 class _AttractOverlayState extends State<_AttractOverlay>
     with SingleTickerProviderStateMixin {
-  int _index = 0;
-  Timer? _timer;
   late final AnimationController _pulse = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 1400),
   )..repeat(reverse: true);
 
   @override
-  void initState() {
-    super.initState();
-    _timer = Timer.periodic(const Duration(seconds: 5), (_) {
-      if (mounted) setState(() => _index = (_index + 1) % _AttractOverlay.images.length);
-    });
-  }
-
-  @override
   void dispose() {
-    _timer?.cancel();
     _pulse.dispose();
     super.dispose();
   }
@@ -916,6 +896,7 @@ class _AttractOverlayState extends State<_AttractOverlay>
   Widget build(BuildContext context) {
     final s = TotemMetrics.scale(context);
     final reduced = TotemMotion.reduced(context);
+    
     final hint = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -932,30 +913,29 @@ class _AttractOverlayState extends State<_AttractOverlay>
         ),
       ],
     );
+
     return Container(
       key: const Key('attract-screen'),
       color: Colors.black,
       child: Stack(
         fit: StackFit.expand,
         children: [
-          AnimatedSwitcher(
-            duration: TotemMotion.dur(context, 800),
-            switchInCurve: Curves.easeInOut,
-            child: Image.asset(
-              _AttractOverlay.images[_index],
-              key: ValueKey(_index),
-              fit: BoxFit.contain,
-            ),
+          // Static background image
+          Image.asset(
+            'assets/images/home/home-background.png',
+            fit: BoxFit.cover,
           ),
+          // Dark gradient overlay for readability
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.black45, Colors.transparent, Color(0xE6071014)],
+                colors: [Colors.black54, Colors.transparent, Color(0xE6071014)],
               ),
             ),
           ),
+          // Top branding
           Positioned(
             top: 60 * s,
             left: 0,
@@ -971,6 +951,92 @@ class _AttractOverlayState extends State<_AttractOverlay>
               ),
             ),
           ),
+          // Welcome message
+          Positioned(
+            top: 140 * s,
+            left: 0,
+            right: 0,
+            child: Column(
+              children: [
+                Text(
+                  'BEM-VINDO',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 56 * s,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 6,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withValues(alpha: 0.7),
+                        blurRadius: 8,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16 * s),
+                Text(
+                  'Totem Digital Interativo',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: const Color(0xFFA8D94A),
+                    fontSize: 28 * s,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 2,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withValues(alpha: 0.7),
+                        blurRadius: 6,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Social media info
+          Positioned(
+            bottom: 220 * s,
+            left: 0,
+            right: 0,
+            child: Column(
+              children: [
+                Text(
+                  'Siga-nos nas redes sociais',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: const Color(0xFFA9BBC0),
+                    fontSize: 22 * s,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 1,
+                  ),
+                ),
+                SizedBox(height: 16 * s),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 24 * s,
+                  runSpacing: 12 * s,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    _SocialIcon(
+                      icon: Icons.alternate_email,
+                      label: '@lixo_eletronico_unicentro',
+                      scale: s,
+                      customLeading: _InstagramIcon(size: 32 * s, color: const Color(0xFFA8D94A)),
+                    ),
+                    _SocialIcon(
+                      icon: Icons.videocam_outlined,
+                      label: 'youtube.com/e-lixo',
+                      scale: s,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          // Touch hint at bottom
           Positioned(
             bottom: 120 * s,
             left: 0,
@@ -986,6 +1052,107 @@ class _AttractOverlayState extends State<_AttractOverlay>
       ),
     );
   }
+}
+
+class _SocialIcon extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final double scale;
+  final Widget? customLeading;
+
+  const _SocialIcon({
+    required this.icon,
+    required this.label,
+    required this.scale,
+    this.customLeading,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final s = scale;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final maxWidth = constraints.maxWidth.isFinite ? constraints.maxWidth : 300 * s;
+        return ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: maxWidth),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              customLeading ?? Icon(icon, color: const Color(0xFFA8D94A), size: 32 * s),
+              SizedBox(width: 12 * s),
+              Flexible(
+                child: Text(
+                  label,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22 * s,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+/// Instagram logo painter for the attract screen
+class _InstagramIcon extends StatelessWidget {
+  final double size;
+  final Color color;
+
+  const _InstagramIcon({required this.size, required this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      size: Size(size, size),
+      painter: _InstagramLogoPainter(color: color),
+    );
+  }
+}
+
+class _InstagramLogoPainter extends CustomPainter {
+  final Color color;
+
+  _InstagramLogoPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = color;
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = size.width / 2;
+    final innerRadius = radius * 0.38;
+
+    // Outer rounded square background
+    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    final rrect = RRect.fromRectAndRadius(rect, Radius.circular(radius * 0.22));
+    canvas.drawRRect(rrect, paint);
+
+    // Outer circle ring
+    final ringPaint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = radius * 0.12;
+    canvas.drawCircle(center, radius * 0.72, ringPaint);
+
+    // Inner filled circle (lens)
+    final innerPaint = Paint()..color = color;
+    canvas.drawCircle(center, innerRadius, innerPaint);
+
+    // Top-right dot (flash)
+    final dotPaint = Paint()..color = color;
+    final dotCenter = Offset(center.dx + radius * 0.55, center.dy - radius * 0.55);
+    canvas.drawCircle(dotCenter, radius * 0.11, dotPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 class _KickerBadge extends StatelessWidget {
