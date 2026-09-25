@@ -37,6 +37,8 @@ assets/images/       # Imagens utilizadas pela aplicação
 
 - Flutter SDK compatível com Dart 3.9 ou superior
 - Emulador ou dispositivo configurado
+- Para o alvo Windows do totem: Visual Studio 2022 com o workload
+  "Desktop development with C++" (necessário para compilar o player de vídeo)
 
 ```bash
 git clone https://github.com/guilhermelerner/App-E_lixo.git
@@ -76,4 +78,10 @@ desses materiais mais acessíveis.
 
 Projeto educacional em desenvolvimento, preparado para execução em um totem
 interativo de alta resolução. As imagens e fichas do acervo ficam no projeto;
-o vídeo incorporado ainda depende de conexão com a internet.
+o vídeo roda **offline** a partir de `assets/videos/e-lixo.mp4` em Windows,
+Linux/macOS (backend `video_player_media_kit`) e na web (MP4 local com fallback
+para YouTube apenas se o arquivo não estiver presente).
+
+> No primeiro `flutter build windows` o CMake baixa o libmpv e as libs ANGLE
+> (~50 MB) do GitHub. É preciso internet nessa etapa; depois disso o app
+> roda totalmente offline. Detalhes em `assets/videos/LEIA-ME.txt`.

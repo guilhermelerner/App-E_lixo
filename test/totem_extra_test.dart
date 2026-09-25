@@ -186,6 +186,34 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('descanso mostra "Sejam bem-vindos" e apenas o Instagram', (tester) async {
+    configureViewport(tester);
+    await tester.pumpWidget(const ELixoApp());
+    await tester.pumpAndSettle();
+
+    await tester.pump(const Duration(seconds: 61));
+    await tester.pump();
+    expect(find.byKey(const Key('attract-screen')), findsOneWidget);
+    expect(find.text('SEJAM BEM-VINDOS'), findsOneWidget);
+    expect(find.text('Siga-nos nas redes sociais'), findsOneWidget);
+    expect(find.text('@lixo_eletronico_unicentro'), findsOneWidget);
+    expect(find.byKey(const Key('attract-instagram-icon')), findsOneWidget);
+    expect(find.textContaining('youtube'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('descanso sem overflow em 2160x3840', (tester) async {
+    configureViewport(tester, size: const Size(2160, 3840));
+    await tester.pumpWidget(const ELixoApp());
+    await tester.pumpAndSettle();
+
+    await tester.pump(const Duration(seconds: 61));
+    await tester.pump();
+    expect(find.byKey(const Key('attract-screen')), findsOneWidget);
+    expect(find.text('SEJAM BEM-VINDOS'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('home + módulos sem overflow em 2160x3840', (tester) async {
     configureViewport(tester, size: const Size(2160, 3840));
     await tester.pumpWidget(const ELixoApp());

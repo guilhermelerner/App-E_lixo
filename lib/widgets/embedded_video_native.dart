@@ -3,7 +3,8 @@ import 'package:video_player/video_player.dart';
 
 import 'loading_shimmer.dart';
 
-/// Player offline: tenta `assets/videos/e-lixo.mp4` (sem internet).
+/// Player offline (Windows/Linux/macOS): reproduz `assets/videos/e-lixo.mp4`
+/// através do backend `video_player_media_kit` (libmpv/ffmpeg).
 /// Se o arquivo ainda não foi colocado, mostra aviso sem quebrar.
 class EmbeddedVideo extends StatefulWidget {
   const EmbeddedVideo({super.key});
@@ -24,7 +25,8 @@ class _EmbeddedVideoState extends State<EmbeddedVideo> {
     controller.initialize().then((_) {
       if (!mounted) return;
       setState(() {});
-    }).catchError((Object _) {
+    }).catchError((Object error) {
+      debugPrint('EmbeddedVideo: falha ao abrir o vídeo nativo: $error');
       if (!mounted) return;
       setState(() => _missing = true);
     });
@@ -47,7 +49,7 @@ class _EmbeddedVideoState extends State<EmbeddedVideo> {
             child: Padding(
               padding: EdgeInsets.all(24),
               child: Text(
-                'Vídeo offline não encontrado.\nColoque o arquivo em assets/videos/e-lixo.mp4.',
+                'Vídeo offline indisponível.\nVerifique o arquivo assets/videos/e-lixo.mp4.',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white70, fontSize: 18),
               ),

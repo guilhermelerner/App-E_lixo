@@ -5,4 +5,22 @@ Para o vídeo rodar SEM internet no totem (exigência da professora):
 3. Rode: flutter pub get
 4. Teste offline: flutter run -d windows (ou web-server) com a internet desligada.
 
-Enquanto o arquivo não existir, o app mostra o YouTube (web) ou um aviso (Windows/teste).
+Player por plataforma:
+- Windows / Linux / macOS: package:video_player com o backend
+  `video_player_media_kit` (libmpv/ffmpeg), registrado em `lib/main.dart`
+  via `VideoPlayerMediaKit.ensureInitialized(windows: true, linux: true)`.
+- Web: MP4 local com HTML5; se o arquivo não existir, usa o YouTube.
+
+Enquanto o arquivo não existir, o app mostra um aviso de "vídeo offline
+indisponível" (sem quebrar a tela).
+
+IMPORTANTE - primeiro build do Windows:
+- Requer Visual Studio 2022 com o workload "Desktop development with C++".
+- O pacote media_kit_libs_windows_video baixa o libmpv e as libs ANGLE
+  (libmpv-2.dll, libEGL.dll, libGLESv2.dll...) via CMake durante o
+  `flutter build windows`. Portanto o PRIMEIRO build precisa de internet
+  (download de ~50 MB do GitHub).
+- Depois do build, o app roda 100% offline: as DLLs ficam na pasta de output
+  junto do executável, e o vídeo é lido de assets/videos/e-lixo.mp4.
+- Se o build falhar complaining de CMake/download, rode `flutter clean` e
+  tente novamente com a internet ligada.

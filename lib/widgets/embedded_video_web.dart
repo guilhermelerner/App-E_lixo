@@ -30,7 +30,10 @@ class _EmbeddedVideoState extends State<EmbeddedVideo> {
     controller.initialize().then((_) {
       if (!mounted) return;
       setState(() {});
-    }).catchError((Object _) {
+    }).catchError((Object error) {
+      debugPrint(
+        'EmbeddedVideo (web): MP4 local indisponível, usando YouTube: $error',
+      );
       if (!mounted) return;
       setState(() => _useFallback = true);
     });

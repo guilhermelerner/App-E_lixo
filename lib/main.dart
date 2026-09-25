@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:video_player_media_kit/video_player_media_kit.dart';
 import 'core/immersive_mode.dart';
 import 'core/totem_metrics.dart';
 import 'core/totem_motion.dart';
@@ -8,6 +9,8 @@ import 'modules/e_lixo/e_lixo_page.dart';
 import 'modules/e_museu/e_museu_page.dart';
 
 void main() {
+  // Habilita o package:video_player no Windows/Linux do totem.
+  VideoPlayerMediaKit.ensureInitialized(windows: true, linux: true);
   runApp(const ELixoApp());
 }
 
@@ -959,8 +962,9 @@ class _AttractOverlayState extends State<_AttractOverlay>
             child: Column(
               children: [
                 Text(
-                  'BEM-VINDO',
+                  'SEJAM BEM-VINDOS',
                   textAlign: TextAlign.center,
+                  maxLines: 1,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 56 * s,
@@ -1014,24 +1018,17 @@ class _AttractOverlayState extends State<_AttractOverlay>
                   ),
                 ),
                 SizedBox(height: 16 * s),
-                Wrap(
-                  alignment: WrapAlignment.center,
-                  spacing: 24 * s,
-                  runSpacing: 12 * s,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    _SocialIcon(
-                      icon: Icons.alternate_email,
-                      label: '@lixo_eletronico_unicentro',
-                      scale: s,
-                      customLeading: _InstagramIcon(size: 32 * s, color: const Color(0xFFA8D94A)),
+                Center(
+                  child: _SocialIcon(
+                    icon: Icons.camera_alt_outlined,
+                    label: '@lixo_eletronico_unicentro',
+                    scale: s,
+                    customLeading: _InstagramIcon(
+                      key: const Key('attract-instagram-icon'),
+                      size: 32 * s,
+                      color: const Color(0xFFA8D94A),
                     ),
-                    _SocialIcon(
-                      icon: Icons.videocam_outlined,
-                      label: 'youtube.com/e-lixo',
-                      scale: s,
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),
@@ -1106,7 +1103,7 @@ class _InstagramIcon extends StatelessWidget {
   final double size;
   final Color color;
 
-  const _InstagramIcon({required this.size, required this.color});
+  const _InstagramIcon({super.key, required this.size, required this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -1124,35 +1121,41 @@ class _InstagramLogoPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = color;
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
-    final innerRadius = radius * 0.38;
 
-    // Outer rounded square background
-    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-    final rrect = RRect.fromRectAndRadius(rect, Radius.circular(radius * 0.22));
-    canvas.drawRRect(rrect, paint);
-
-    // Outer circle ring
-    final ringPaint = Paint()
+    final stroke = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
-      ..strokeWidth = radius * 0.12;
-    canvas.drawCircle(center, radius * 0.72, ringPaint);
+      ..strokeWidth = (size.width * 0.09).clamp(1.5, double.infinity)
+      ..strokeCap = StrokeCap.round;
+    final fill = Paint()..color = color;
 
-    // Inner filled circle (lens)
-    final innerPaint = Paint()..color = color;
-    canvas.drawCircle(center, innerRadius, innerPaint);
+    // Contorno do quadrado arredondado
+    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
+    final rrect = RRect.fromRectAndRadius(
+      rect.deflate(stroke.strokeWidth / 2),
+      Radius.circular(radius * 0.26),
+    );
+    canvas.drawRRect(rrect, stroke);
 
-    // Top-right dot (flash)
-    final dotPaint = Paint()..color = color;
-    final dotCenter = Offset(center.dx + radius * 0.55, center.dy - radius * 0.55);
-    canvas.drawCircle(dotCenter, radius * 0.11, dotPaint);
+    // Anel da lente
+    canvas.drawCircle(center, radius * 0.42, stroke);
+
+    // Lente preenchida
+    canvas.drawCircle(center, radius * 0.20, fill);
+
+    // Flash no canto superior direito
+    canvas.drawCircle(
+      Offset(center.dx + radius * 0.42, center.dy - radius * 0.42),
+      radius * 0.08,
+      fill,
+    );
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _InstagramLogoPainter oldDelegate) =>
+      oldDelegate.color != color;
 }
 
 class _KickerBadge extends StatelessWidget {
